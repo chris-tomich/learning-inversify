@@ -43,9 +43,9 @@ let Ninja = class Ninja {
         this._katana = katana;
         this._shuriken = shuriken;
     }
-    fight() { return this._katana.hit(); }
+    fight() { return "ninja" + this._katana.hit(); }
     ;
-    sneak() { return this._shuriken.throw(); }
+    sneak() { return "ninja" + this._shuriken.throw(); }
     ;
 };
 Ninja = __decorate([
@@ -54,21 +54,49 @@ Ninja = __decorate([
     __param(1, inversify_1.inject(Symbol.for('IMartialArt'))),
     __metadata("design:paramtypes", [Object, Object])
 ], Ninja);
+let Pirate = class Pirate {
+    constructor(katana, shuriken, _ninja) {
+        this._ninja = _ninja;
+        this._katana = katana;
+        this._shuriken = shuriken;
+    }
+    fight() { return "pirate: " + this._katana.hit(); }
+    ;
+    sneak() { return "pirate: " + this._shuriken.throw(); }
+    ;
+    ninjaFight() { return this._ninja.fight(); }
+    ;
+    ninjaSneak() { return this._ninja.sneak(); }
+    ;
+};
+Pirate = __decorate([
+    inversify_1.injectable(),
+    __param(0, inversify_1.inject(Symbol.for('IWeapon'))),
+    __param(1, inversify_1.inject(Symbol.for('IMartialArt'))),
+    __param(2, inversify_1.inject(Symbol.for('IFighter'))),
+    __metadata("design:paramtypes", [Object, Object, Object])
+], Pirate);
 let container = new inversify_1.Container();
-container.bind(Symbol.for('IWeapon')).to(Katana).inRequestScope();
-container.bind(Symbol.for('IMartialArt')).to(Shuriken).inRequestScope();
-container.bind(Symbol.for('IFighter')).to(Ninja).inRequestScope();
-let fighter = container.get(Symbol.for('IFighter'));
-console.log(fighter.fight());
-console.log(fighter.sneak());
-let weapon = container.get(Symbol.for('IWeapon'));
-console.log(weapon.hit());
-let martialArt = container.get(Symbol.for('IMartialArt'));
-console.log(martialArt.throw());
-fighter = container.get(Symbol.for('IFighter'));
-console.log(fighter.fight());
-console.log(fighter.sneak());
-weapon = container.get(Symbol.for('IWeapon'));
-console.log(weapon.hit());
-martialArt = container.get(Symbol.for('IMartialArt'));
-console.log(martialArt.throw());
+container.bind(Symbol.for('IWeapon')).to(Katana);
+container.bind(Symbol.for('IMartialArt')).to(Shuriken);
+container.bind(Symbol.for('IFighter')).to(Ninja);
+container.bind(Symbol.for('IPirateFighter')).to(Pirate);
+let pirateFighter = container.get(Symbol.for('IPirateFighter'));
+console.log(pirateFighter.fight());
+console.log(pirateFighter.sneak());
+console.log(pirateFighter.ninjaFight());
+console.log(pirateFighter.ninjaSneak());
+// let fighter = container.get<IFighter>(Symbol.for('IFighter'));
+// console.log(fighter.fight());
+// console.log(fighter.sneak());
+// let weapon = container.get<IWeapon>(Symbol.for('IWeapon'));
+// console.log(weapon.hit());
+// let martialArt = container.get<IMartialArt>(Symbol.for('IMartialArt'));
+// console.log(martialArt.throw());
+// fighter = container.get<IFighter>(Symbol.for('IFighter'));
+// console.log(fighter.fight());
+// console.log(fighter.sneak());
+// weapon = container.get<IWeapon>(Symbol.for('IWeapon'));
+// console.log(weapon.hit());
+// martialArt = container.get<IMartialArt>(Symbol.for('IMartialArt'));
+// console.log(martialArt.throw());
